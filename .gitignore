@@ -1,0 +1,5 @@
+TP Compilador/y.tab.c
+TP Compilador/y.tab.h
+TP Compilador/salidaParser
+TP Compilador/salida
+TP Compilador/lex.yy.c
