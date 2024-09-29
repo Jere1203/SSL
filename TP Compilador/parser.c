@@ -329,8 +329,7 @@ void Operador(char *presul)
 }
 /**********************Rutinas Semanticas******************************/
 
-REG_EXPRESION
-ProcesarCte(void)
+REG_EXPRESION ProcesarCte(void)
 {
     REG_EXPRESION reg;
     reg.clase = CONSTANTE;
@@ -520,6 +519,7 @@ TOKEN scanner()
          {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
          {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14},
          {14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14}};
+         
     int car;
     int col;
     int estado = 0;
@@ -537,44 +537,44 @@ TOKEN scanner()
     } while (!estadoFinal(estado) && !(estado == 14));
     buffer[i] = '\0'; // complete la cadena
     switch (estado)
-    {
-    case 2:
-        if (col != 11)
-        {                    // si el carácter espureo no es blanco…
-            ungetc(car, in); // lo retorna al flujo
-            buffer[i - 1] = '\0';
-        }
-        return ID;
-    case 4:
-        if (col != 11)
         {
-            ungetc(car, in);
-            buffer[i - 1] = '\0';
+        case 2:
+            if (col != 11)
+            {                    // si el carácter espureo no es blanco…
+                ungetc(car, in); // lo retorna al flujo
+                buffer[i - 1] = '\0';
+            }
+            return ID;
+        case 4:
+            if (col != 11)
+            {
+                ungetc(car, in);
+                buffer[i - 1] = '\0';
+            }
+            return CONSTANTE;
+        case 5:
+            return SUMA;
+        case 6:
+            return RESTA;
+        case 7:
+            return PARENIZQUIERDO;
+        case 8:
+            return PARENDERECHO;
+        case 9:
+            return COMA;
+        case 10:
+            return PUNTOYCOMA;
+        case 12:
+            return ASIGNACION;
+        case 13:
+            return FDT;
+        case 14:
+            return ERRORLEXICO;
+        case 15:
+            return MULTIPLICACION; // Nuevo caso para '*'
         }
-        return CONSTANTE;
-    case 5:
-        return SUMA;
-    case 6:
-        return RESTA;
-    case 7:
-        return PARENIZQUIERDO;
-    case 8:
-        return PARENDERECHO;
-    case 9:
-        return COMA;
-    case 10:
-        return PUNTOYCOMA;
-    case 12:
-        return ASIGNACION;
-    case 13:
-        return FDT;
-    case 14:
-        return ERRORLEXICO;
-    case 15:
-        return MULTIPLICACION; // Nuevo caso para '*'
-    }
     return 0;
-}
+}   
 
 int estadoFinal(int e)
 {

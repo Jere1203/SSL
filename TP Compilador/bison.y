@@ -87,10 +87,20 @@ listaExpresiones: listaExpresiones COMA expresion
 }
 
 // 
-expresion: primaria 
-| expresion RESTA primaria {$<num>$ = $<num>1 - $<num>3;}
-| expresion SUMA primaria {$<num>$ = $<num>1 + $<num>3;}
-| expresion MULTIPLICACION primaria {$<num>$ = $<num>1 * $<num>3;}
+// 
+expresion: primaria //Primaria es un ID, constante o parentesis
+| expresion RESTA primaria 
+{
+    $<num>$ = $<num>1 - $<num>3;
+}
+| expresion SUMA primaria 
+{
+    $<num>$ = $<num>1 + $<num>3;
+}
+| expresion MULTIPLICACION primaria
+{
+    $<num>$ = $<num>1 * $<num>3;
+}
 
 // <primaria> -> ID
 primaria: ID 
@@ -116,8 +126,41 @@ primaria: ID
 
 
 %%
-int main(){
-    yyparse();
+int main(int argc, char *argv[]){
+    char nomArchi[50];
+    int l=0;
+    FILE *in;
+    if (argc > 1)
+    {
+        if (argc != 2)
+        {
+            printf("Numero incorrecto de argumentos\n");
+            return -1;
+        } // los argumentos deben ser 2
+        strcpy(nomArchi, argv[1]);
+        l = strlen(nomArchi);
+        // requiere para compilar un archivo de extensión.m archivo.m
+        if (nomArchi[l - 1] != 'm' || nomArchi[l - 2] != '.')
+        {
+            printf("Nombre incorrecto del Archivo Fuente\n");
+            return -1;
+        }
+        if ((in = fopen(nomArchi, "r")) == NULL)
+        {
+            printf("No se pudo abrir archivo fuente\n");
+            return -1; // no pudo abrir archivo
+        }
+        yyin = in;
+        yyparse();
+        fclose(in);
+        return 0;
+    }
+    else{
+        yyin = stdin;
+        yyparse();
+        return 0;
+    }
+
 }
 
 void yyerror (char *s){
@@ -125,10 +168,10 @@ void yyerror (char *s){
     exit(1);
 }
 int yywrap(){
-return 1;
+    return 1;
 }
 
-void asignarIds(char* nombre, int valor) {
+void asignarIds(char* nombre, int valor) { // Si no se encuentra el ID lo agrega
     int i;
     for (i = 0; i < cantidadIdentificadores; i++) {
         if (strcmp(identificadores[i].nombre, nombre) == 0) {
@@ -143,22 +186,3 @@ void asignarIds(char* nombre, int valor) {
         cantidadIdentificadores++;
     }
 }
-
-// Archivo por linea de comando
-// int main(int argc, char * argv[]){
-//     if (argc > 1) {                         
-//         // Abrir el archivo .m
-//         FILE *archivo = fopen(argv[1], "r");
-//         if (!archivo) {
-//             perror("Error al abrir el archivo");
-//             return 1;
-//         }
-
-//         // Establecer el archivo como entrada para Flex
-//         yyin = archivo;
-//         yyparse();
-
-//         fclose(archivo);
-        
-// 	}
-// }
