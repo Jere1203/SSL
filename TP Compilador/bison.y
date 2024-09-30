@@ -38,7 +38,7 @@ programa: INICIO listaSentencias FIN
 listaSentencias: listaSentencias sentencia 
 |sentencia
 
-// Sentencia puede ser ID, Leer o Escribir
+// Sentencia puede ser Asignacion, Leer o Escribir
 // <sentencia> -> ID ASIGNACION <expresion> PYCOMA
 sentencia: ID ASIGNACION expresion PYCOMA 
 {
@@ -56,7 +56,7 @@ sentencia: ID ASIGNACION expresion PYCOMA
     while(token != NULL){
 	printf("Ingresarle un valor a el id %s: ", token);
         scanf("%d", &numero);
-	asignarIds(token, numero);
+	    asignarIds(token, numero);
         token = strtok(NULL, " ,");
     }
 }
@@ -112,7 +112,7 @@ primaria: ID
     if (i == cantidadIdentificadores) {
 	char mensaje[100];
         sprintf(mensaje, "La variable %s no ha sido definida.\n", nombre);
-	yyerror(mensaje);
+	    yyerror(mensaje);
     }
 }
 |CONSTANTE // <primaria> -> CONSTANTE 

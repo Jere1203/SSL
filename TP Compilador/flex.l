@@ -4,10 +4,12 @@
 	#include "y.tab.h"
 	#include <string.h>
 %}
-DIGITO [0-9]
+/* DEFINICIONES */
+DIGITO [0-9] 
 LETRA [a-zA-Z]
 IDENTIFICADOR {LETRA}({LETRA}|{DIGITO})*
 constEntera {DIGITO}({DIGITO})*
+/* REGLAS */
 %%
 EOF           {return FDT;}
 "inicio"      {return INICIO;}
@@ -15,7 +17,7 @@ EOF           {return FDT;}
 "leer"        {return LEER;}
 "escribir"    {return ESCRIBIR;}
 ":=" 		  {return ASIGNACION;}
-{constEntera} {yylval.num=atoi(yytext);return CONSTANTE;}
+{constEntera} {yylval.num = atoi(yytext); return CONSTANTE;}
 ";" 		  {return PYCOMA;}
 "," 		  {return COMA;}
 "(" 		  {return PARENIZQUIERDO;}
