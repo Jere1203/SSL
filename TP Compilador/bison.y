@@ -1,7 +1,6 @@
 %{
 #include <stdio.h>
 #include <stdlib.h> 
-#include <math.h>
 #include <string.h>
 extern char *yytext;
 extern int yyleng;
@@ -24,7 +23,7 @@ int cantidadIdentificadores = 0;
    int num;
 } 
 
-%token ASIGNACION PYCOMA RESTA SUMA MULTIPLICACION PARENIZQUIERDO PARENDERECHO INICIO FIN LEER ESCRIBIR COMA FDT
+%token ASIGNACION PYCOMA RESTA SUMA PARENIZQUIERDO PARENDERECHO INICIO FIN LEER ESCRIBIR COMA FDT
 %token <cadena> ID
 %token <num> CONSTANTE
 
@@ -39,6 +38,7 @@ programa: INICIO listaSentencias FIN
 listaSentencias: listaSentencias sentencia 
 |sentencia
 
+// Sentencia puede ser ID, Leer o Escribir
 // <sentencia> -> ID ASIGNACION <expresion> PYCOMA
 sentencia: ID ASIGNACION expresion PYCOMA 
 {
@@ -97,10 +97,6 @@ expresion: primaria //Primaria es un ID, constante o parentesis
 {
     $<num>$ = $<num>1 + $<num>3;
 }
-| expresion MULTIPLICACION primaria
-{
-    $<num>$ = $<num>1 * $<num>3;
-}
 
 // <primaria> -> ID
 primaria: ID 
@@ -121,7 +117,9 @@ primaria: ID
 }
 |CONSTANTE // <primaria> -> CONSTANTE 
 |PARENIZQUIERDO expresion PARENDERECHO  // <primaria> -> PARENIZQUIERDO <expresion> PARENDERECHO
-{ $<num>$ = $<num>2; }
+{ 
+    $<num>$ = $<num>2; 
+}
 ;
 
 

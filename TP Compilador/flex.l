@@ -22,8 +22,6 @@ EOF           {return FDT;}
 ")" 		  {return PARENDERECHO;}
 "+" 		  {return SUMA;}
 "-" 		  {return RESTA;}
-"*" 		  {return MULTIPLICACION;}
 
 {IDENTIFICADOR} {yylval.cadena = strdup(yytext); return ID;}
 %%
-
